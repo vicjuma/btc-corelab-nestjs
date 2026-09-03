@@ -12,6 +12,7 @@ import { GetReceivedByAddressDto } from './dto/get-received-by-address.dto';
 import { GetReceivedByLabelDto } from './dto/get-received-by-label.dto';
 import { GetTransactionDto } from './dto/get-transaction.dto';
 import { ImportDescriptorsDto } from './dto/import-descriptors.dto';
+import { ListReceivedByAddressDto } from './dto/list-received-by-address.dto';
 
 @Injectable()
 export class WalletService {
@@ -247,5 +248,74 @@ export class WalletService {
     const { requests } = importDescriptorsDto;
 
     return this.rpcService.rpc('importdescriptors', JSON.stringify(requests));
+  }
+
+  async importPrunedFunds(rawtransaction: string, txoutproof: string) {
+    return this.rpcService.rpc(
+      'importprunedfunds',
+      `rawtransaction=${rawtransaction}`,
+      `txoutproof=${txoutproof}`,
+    );
+  }
+
+  async keypoolRefill(newsize: number) {
+    return this.rpcService.rpc('keypoolrefill', `newsize=${newsize}`);
+  }
+
+  async listAddressGroupings() {
+    return this.rpcService.rpc('listaddressgroupings');
+  }
+
+  async listDescriptors(privateProp: boolean = false) {
+    return this.rpcService.rpc('listdescriptors', `private=${privateProp}`);
+  }
+
+  async listLabels(purpose?: string) {
+    return this.rpcService.rpc(
+      'listlabels',
+      `private=${purpose ? purpose : ''}`,
+    );
+  }
+
+  async listlockunspent() {
+    return this.rpcService.rpc('listlockunspent');
+  }
+
+  async listReceivedByaddress(
+    listReceivedByAddressDto: ListReceivedByAddressDto,
+  ) {
+    const {
+      minconf,
+      include_empty,
+      include_watchonly,
+      include_immature_coinbase,
+      address_filter,
+    } = listReceivedByAddressDto;
+    return this.rpcService.rpc(
+      'listreceivedbyaddress',
+      `minconf=${minconf ? minconf : 1}`,
+      `include_empty=${include_empty ? include_empty : false}`,
+      `include_watchonly=${include_watchonly ? include_watchonly : false}`,
+      `include_immature_coinbase=${include_immature_coinbase ? include_immature_coinbase : false}`,
+      `address_filter=${address_filter ? address_filter : ''}`,
+    );
+  }
+
+  async listReceivedByLabel(
+    listReceivedByAddressDto: ListReceivedByAddressDto,
+  ) {
+    const {
+      minconf,
+      include_empty,
+      include_watchonly,
+      include_immature_coinbase,
+    } = listReceivedByAddressDto;
+    return this.rpcService.rpc(
+      'listreceivedbylabel',
+      `minconf=${minconf ? minconf : 1}`,
+      `include_empty=${include_empty ? include_empty : false}`,
+      `include_watchonly=${include_watchonly ? include_watchonly : false}`,
+      `include_immature_coinbase=${include_immature_coinbase ? include_immature_coinbase : false}`,
+    );
   }
 }
