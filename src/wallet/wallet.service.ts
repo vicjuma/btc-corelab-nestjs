@@ -11,6 +11,7 @@ import { GetRawChangeAddressDto } from './dto/get-raw-change-address.dto';
 import { GetReceivedByAddressDto } from './dto/get-received-by-address.dto';
 import { GetReceivedByLabelDto } from './dto/get-received-by-label.dto';
 import { GetTransactionDto } from './dto/get-transaction.dto';
+import { ImportDescriptorsDto } from './dto/import-descriptors.dto';
 
 @Injectable()
 export class WalletService {
@@ -240,5 +241,11 @@ export class WalletService {
 
   async getWalletInfo() {
     return this.rpcService.rpc('getwalletinfo');
+  }
+
+  async importDescriptors(importDescriptorsDto: ImportDescriptorsDto) {
+    const { requests } = importDescriptorsDto;
+
+    return this.rpcService.rpc('importdescriptors', JSON.stringify(requests));
   }
 }
