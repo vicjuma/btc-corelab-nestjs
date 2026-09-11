@@ -5,6 +5,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { WalletModule } from './wallet/wallet.module';
 import { RpcService } from './rpc/rpc.service';
+import { BlockchainModule } from './blockchain/blockchain.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RpcService } from './rpc/rpc.service';
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     WalletModule,
+    BlockchainModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, Logger, RpcService],
