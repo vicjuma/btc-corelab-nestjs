@@ -318,4 +318,12 @@ export class WalletService {
       `include_immature_coinbase=${include_immature_coinbase ? include_immature_coinbase : false}`,
     );
   }
+
+  async listWallets() {
+    return this.rpcService.rpc('listwallets');
+  }
+
+  async listWalletdir() {
+    return this.rpcService.rpc('listwalletdir');
+  }
 }

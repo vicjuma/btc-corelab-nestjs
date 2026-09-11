@@ -119,4 +119,14 @@ export class WalletController {
   getWalletInfo() {
     return this.walletService.getWalletInfo();
   }
+
+  @Get('listwallets')
+  listWallets() {
+    return this.walletService.listWallets();
+  }
+
+  @Get('listwalletdir')
+  listWalletdir() {
+    return this.walletService.listWalletdir();
+  }
 }
