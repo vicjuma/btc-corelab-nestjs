@@ -11,6 +11,7 @@ import { GetRawChangeAddressDto } from './dto/get-raw-change-address.dto';
 import { GetReceivedByAddressDto } from './dto/get-received-by-address.dto';
 import { GetReceivedByLabelDto } from './dto/get-received-by-label.dto';
 import { GetTransactionDto } from './dto/get-transaction.dto';
+import { ListReceivedByAddressDto } from './dto/list-received-by-address.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -118,6 +119,25 @@ export class WalletController {
   @Get('getwalletinfo')
   getWalletInfo() {
     return this.walletService.getWalletInfo();
+  }
+
+  @Get('listdescriptors')
+  listDescriptors() {
+    return this.walletService.listDescriptors();
+  }
+
+  @Get('listreceivedbyaddress')
+  listReceivedByaddress(
+    @Body() listReceivedByAddressDto: ListReceivedByAddressDto,
+  ) {
+    return this.walletService.listReceivedByaddress(listReceivedByAddressDto);
+  }
+
+  @Get('listreceivedbylabel')
+  listReceivedByLabel(
+    @Body() listReceivedByAddressDto: ListReceivedByAddressDto,
+  ) {
+    return this.walletService.listReceivedByLabel(listReceivedByAddressDto);
   }
 
   @Get('listwallets')

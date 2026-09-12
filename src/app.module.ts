@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WalletModule } from './wallet/wallet.module';
 import { RpcService } from './rpc/rpc.service';
 import { BlockchainModule } from './blockchain/blockchain.module';
+import { UtilModule } from './util/util.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BlockchainModule } from './blockchain/blockchain.module';
     ConfigModule.forRoot({ isGlobal: true }),
     WalletModule,
     BlockchainModule,
+    UtilModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, Logger, RpcService],
