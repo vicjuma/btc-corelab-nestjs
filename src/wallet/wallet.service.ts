@@ -17,6 +17,7 @@ import { ListSinceBlockDto } from './dto/list-since-block.dto';
 import { ListTransactionsDto } from './dto/list-transactions.dto';
 import { ListUnspentDto } from './dto/list-unspent.dto';
 import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
+import { SimulateRawTransactionDto } from './dto/simulate-raw-transaction.dto';
 
 @Injectable()
 export class WalletService {
@@ -489,5 +490,19 @@ export class WalletService {
     ];
 
     return this.rpcService.rpc('walletcreatefundedpsbt', ...args);
+  }
+
+  async simulateRawTransaction(
+    simulateRawTransactionDto: SimulateRawTransactionDto,
+  ) {
+    const { rawtxs, options } = simulateRawTransactionDto;
+
+    const args = [
+      JSON.stringify(rawtxs),
+
+      ...(options !== undefined ? [JSON.stringify(options)] : []),
+    ];
+
+    return this.rpcService.rpc('simulaterawtransaction', ...args);
   }
 }

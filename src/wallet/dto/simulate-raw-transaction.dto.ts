@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -6,6 +5,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class SimulateRawTransactionOptionsDto {
   @IsOptional()
@@ -14,10 +14,9 @@ export class SimulateRawTransactionOptionsDto {
 }
 
 export class SimulateRawTransactionDto {
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  rawtxs?: string[];
+  rawtxs!: string[];
 
   @IsOptional()
   @ValidateNested()

@@ -5,6 +5,8 @@ import { FundRawTransactionDto } from './dto/fund-raw-transaction.dto';
 import { CreatePsbtDto } from './dto/create-psbt.dto';
 import { UtxoUpdatePsbtDto } from './dto/utxo-update-psbt.dto';
 import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
+import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
+import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -112,5 +114,23 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('descriptorprocesspsbt', ...args);
+  }
+
+  async analyzePsbt(analyzePsbtDto: AnalyzePsbtDto) {
+    const { psbt } = analyzePsbtDto;
+
+    return this.rpcService.rpc('analyzepsbt', psbt);
+  }
+
+  async testMempoolAccept(testMempoolAcceptDto: TestMempoolAcceptDto) {
+    const { rawtxs, maxfeerate } = testMempoolAcceptDto;
+
+    const args = [
+      JSON.stringify(rawtxs),
+
+      ...(maxfeerate !== undefined ? [String(maxfeerate)] : []),
+    ];
+
+    return this.rpcService.rpc('testmempoolaccept', ...args);
   }
 }

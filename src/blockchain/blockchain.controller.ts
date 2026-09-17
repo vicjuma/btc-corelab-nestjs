@@ -3,6 +3,7 @@ import { BlockchainService } from './blockchain.service';
 import { GetTxOutDto } from './dto/get-tx-out.dto';
 import { GetTxSpendingPrevoutDto } from './dto/get-tx-spending-prevout.dto';
 import { GetRawMempoolDto } from './dto/get-raw-mempool.dto';
+import { GetMempoolEntryDto } from './dto/get-mempool-entry.dto';
 
 @Controller('blockchain')
 export class BlockchainController {
@@ -53,5 +54,10 @@ export class BlockchainController {
   @Get('getmempoolinfo')
   getMempoolInfo() {
     return this.blockchainService.getMempoolInfo();
+  }
+
+  @Post('getmempoolentry')
+  getMempoolEntry(@Body() getMempoolEntryDto: GetMempoolEntryDto) {
+    return this.blockchainService.getMempoolEntry(getMempoolEntryDto);
   }
 }

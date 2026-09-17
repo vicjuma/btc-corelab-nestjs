@@ -16,6 +16,7 @@ import { ListSinceBlockDto } from './dto/list-since-block.dto';
 import { ListTransactionsDto } from './dto/list-transactions.dto';
 import { ListUnspentDto } from './dto/list-unspent.dto';
 import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
+import { SimulateRawTransactionDto } from './dto/simulate-raw-transaction.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -174,5 +175,12 @@ export class WalletController {
     @Body() walletCreateFundedPsbtDto: WalletCreateFundedPsbtDto,
   ) {
     return this.walletService.walletCreateFundedPsbt(walletCreateFundedPsbtDto);
+  }
+
+  @Post('simulaterawtransaction')
+  simulateRawTransaction(
+    @Body() simulateRawTransactionDto: SimulateRawTransactionDto,
+  ) {
+    return this.walletService.simulateRawTransaction(simulateRawTransactionDto);
   }
 }

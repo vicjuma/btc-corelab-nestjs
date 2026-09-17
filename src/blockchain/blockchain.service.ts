@@ -3,6 +3,7 @@ import { RpcService } from 'src/rpc/rpc.service';
 import { GetTxOutDto } from './dto/get-tx-out.dto';
 import { GetTxSpendingPrevoutDto } from './dto/get-tx-spending-prevout.dto';
 import { GetRawMempoolDto } from './dto/get-raw-mempool.dto';
+import { GetMempoolEntryDto } from './dto/get-mempool-entry.dto';
 
 /**
  * These servce functions are helping is to internally user them with these abstractions
@@ -72,5 +73,11 @@ export class BlockchainService {
 
   async getMempoolInfo() {
     return this.rpcService.rpc('getmempoolinfo');
+  }
+
+  async getMempoolEntry(getMempoolEntryDto: GetMempoolEntryDto) {
+    const { txid } = getMempoolEntryDto;
+
+    return this.rpcService.rpc('getmempoolentry', txid);
   }
 }

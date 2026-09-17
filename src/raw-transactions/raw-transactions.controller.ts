@@ -5,6 +5,8 @@ import { FundRawTransactionDto } from './dto/fund-raw-transaction.dto';
 import { CreatePsbtDto } from './dto/create-psbt.dto';
 import { UtxoUpdatePsbtDto } from './dto/utxo-update-psbt.dto';
 import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
+import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
+import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -45,5 +47,15 @@ export class RawTransactionsController {
     return this.rawTransactionsService.descriptorProcessPsbt(
       descriptorProcessPsbtDto,
     );
+  }
+
+  @Post('analyzepsbt')
+  analyzePsbt(@Body() analyzePsbtDto: AnalyzePsbtDto) {
+    return this.rawTransactionsService.analyzePsbt(analyzePsbtDto);
+  }
+
+  @Post('testmempoolaccept')
+  testMempoolAccept(@Body() testMempoolAcceptDto: TestMempoolAcceptDto) {
+    return this.rawTransactionsService.testMempoolAccept(testMempoolAcceptDto);
   }
 }
