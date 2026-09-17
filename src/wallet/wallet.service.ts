@@ -13,6 +13,10 @@ import { GetReceivedByLabelDto } from './dto/get-received-by-label.dto';
 import { GetTransactionDto } from './dto/get-transaction.dto';
 import { ImportDescriptorsDto } from './dto/import-descriptors.dto';
 import { ListReceivedByAddressDto } from './dto/list-received-by-address.dto';
+import { ListSinceBlockDto } from './dto/list-since-block.dto';
+import { ListTransactionsDto } from './dto/list-transactions.dto';
+import { ListUnspentDto } from './dto/list-unspent.dto';
+import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
 
 @Injectable()
 export class WalletService {
@@ -319,11 +323,171 @@ export class WalletService {
     );
   }
 
+  async listSinceBlock(listSinceBlockDto: ListSinceBlockDto) {
+    const {
+      blockhash,
+      target_confirmations,
+      include_watchonly,
+      include_removed,
+      include_change,
+      label,
+    } = listSinceBlockDto;
+
+    const hasLaterArg =
+      target_confirmations !== undefined ||
+      include_watchonly !== undefined ||
+      include_removed !== undefined ||
+      include_change !== undefined ||
+      label !== undefined;
+
+    const args = [
+      ...(blockhash !== undefined || hasLaterArg ? [blockhash ?? ''] : []),
+      ...(target_confirmations !== undefined || hasLaterArg
+        ? [String(target_confirmations ?? 1)]
+        : []),
+      ...(include_watchonly !== undefined ||
+      include_removed !== undefined ||
+      include_change !== undefined ||
+      label !== undefined
+        ? [String(include_watchonly ?? false)]
+        : []),
+      ...(include_removed !== undefined ||
+      include_change !== undefined ||
+      label !== undefined
+        ? [String(include_removed ?? true)]
+        : []),
+      ...(include_change !== undefined || label !== undefined
+        ? [String(include_change ?? false)]
+        : []),
+      ...(label !== undefined ? [label] : []),
+    ];
+
+    return this.rpcService.rpc('listsinceblock', ...args);
+  }
+
+  async listTransactions(listTransactionsDto: ListTransactionsDto) {
+    const { label, count, skip, include_watchonly } = listTransactionsDto;
+
+    const hasLaterArg =
+      count !== undefined ||
+      skip !== undefined ||
+      include_watchonly !== undefined;
+
+    const args = [
+      ...(label !== undefined || hasLaterArg ? [label ?? ''] : []),
+      ...(count !== undefined ||
+      skip !== undefined ||
+      include_watchonly !== undefined
+        ? [String(count ?? 10)]
+        : []),
+      ...(skip !== undefined || include_watchonly !== undefined
+        ? [String(skip ?? 0)]
+        : []),
+      ...(include_watchonly !== undefined ? [String(include_watchonly)] : []),
+    ];
+
+    return this.rpcService.rpc('listtransactions', ...args);
+  }
+
+  async listUnspent(listUnspentDto: ListUnspentDto) {
+    const { minconf, maxconf, addresses, include_unsafe, query_options } =
+      listUnspentDto;
+
+    const hasLaterArg =
+      maxconf !== undefined ||
+      addresses !== undefined ||
+      include_unsafe !== undefined ||
+      query_options !== undefined;
+
+    const args = [
+      ...(minconf !== undefined || hasLaterArg ? [String(minconf ?? 1)] : []),
+
+      ...(maxconf !== undefined ||
+      addresses !== undefined ||
+      include_unsafe !== undefined ||
+      query_options !== undefined
+        ? [String(maxconf ?? 9999999)]
+        : []),
+
+      ...(addresses !== undefined ||
+      include_unsafe !== undefined ||
+      query_options !== undefined
+        ? [JSON.stringify(addresses ?? [])]
+        : []),
+
+      ...(include_unsafe !== undefined || query_options !== undefined
+        ? [String(include_unsafe ?? true)]
+        : []),
+
+      ...(query_options !== undefined ? [JSON.stringify(query_options)] : []),
+    ];
+
+    return this.rpcService.rpc('listunspent', ...args);
+  }
+
   async listWallets() {
     return this.rpcService.rpc('listwallets');
   }
 
   async listWalletdir() {
     return this.rpcService.rpc('listwalletdir');
+  }
+
+  async walletCreateFundedPsbt(
+    walletCreateFundedPsbtDto: WalletCreateFundedPsbtDto,
+  ) {
+    const {
+      inputs,
+      outputs,
+      locktime,
+      options,
+      bip32derivs,
+      version,
+      psbt_version,
+    } = walletCreateFundedPsbtDto;
+
+    const hasLaterArg =
+      locktime !== undefined ||
+      options !== undefined ||
+      bip32derivs !== undefined ||
+      version !== undefined ||
+      psbt_version !== undefined;
+
+    const args = [
+      ...(inputs !== undefined || hasLaterArg
+        ? [JSON.stringify(inputs ?? [])]
+        : []),
+
+      JSON.stringify(outputs),
+
+      ...(locktime !== undefined ||
+      options !== undefined ||
+      bip32derivs !== undefined ||
+      version !== undefined ||
+      psbt_version !== undefined
+        ? [String(locktime ?? 0)]
+        : []),
+
+      ...(options !== undefined ||
+      bip32derivs !== undefined ||
+      version !== undefined ||
+      psbt_version !== undefined
+        ? [JSON.stringify(options ?? {})]
+        : []),
+
+      ...(bip32derivs !== undefined ||
+      version !== undefined ||
+      psbt_version !== undefined
+        ? [String(bip32derivs ?? true)]
+        : []),
+
+      ...(version !== undefined || psbt_version !== undefined
+        ? [String(version ?? 2)]
+        : []),
+
+      ...(psbt_version !== undefined ? [String(psbt_version)] : []),
+    ];
+
+    return this.rpcService.rpc('walletcreatefundedpsbt', ...args);
   }
 }

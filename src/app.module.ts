@@ -7,6 +7,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { RpcService } from './rpc/rpc.service';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { UtilModule } from './util/util.module';
+import { RawTransactionsModule } from './raw-transactions/raw-transactions.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UtilModule } from './util/util.module';
     WalletModule,
     BlockchainModule,
     UtilModule,
+    RawTransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, Logger, RpcService],

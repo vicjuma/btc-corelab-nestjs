@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RpcService } from 'src/rpc/rpc.service';
+import { EstimateSmartFeeDto } from './dto/estimate-smart-fee.dto';
 
 @Injectable()
 export class UtilService {
@@ -19,5 +20,21 @@ export class UtilService {
 
   async validateAddress(address: string) {
     return this.rpcService.rpc('validateaddress', `address=${address}`);
+  }
+
+  async estimateSmartFee(estimateSmartFeeDto: EstimateSmartFeeDto) {
+    const { conf_target, estimate_mode, options } = estimateSmartFeeDto;
+
+    const hasOptions = options !== undefined;
+
+    const args = [
+      String(conf_target),
+      ...(estimate_mode !== undefined || hasOptions
+        ? [estimate_mode ?? 'economical']
+        : []),
+      ...(hasOptions ? [JSON.stringify(options)] : []),
+    ];
+
+    return this.rpcService.rpc('estimatesmartfee', ...args);
   }
 }

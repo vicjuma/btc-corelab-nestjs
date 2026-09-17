@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class ListSinceBlockDto {
   @IsOptional()
@@ -6,7 +6,7 @@ export class ListSinceBlockDto {
   blockhash?: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   target_confirmations?: number;
 
   @IsOptional()

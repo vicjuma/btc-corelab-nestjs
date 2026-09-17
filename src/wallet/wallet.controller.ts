@@ -12,6 +12,10 @@ import { GetReceivedByAddressDto } from './dto/get-received-by-address.dto';
 import { GetReceivedByLabelDto } from './dto/get-received-by-label.dto';
 import { GetTransactionDto } from './dto/get-transaction.dto';
 import { ListReceivedByAddressDto } from './dto/list-received-by-address.dto';
+import { ListSinceBlockDto } from './dto/list-since-block.dto';
+import { ListTransactionsDto } from './dto/list-transactions.dto';
+import { ListUnspentDto } from './dto/list-unspent.dto';
+import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -140,6 +144,21 @@ export class WalletController {
     return this.walletService.listReceivedByLabel(listReceivedByAddressDto);
   }
 
+  @Post('listsinceblock')
+  listSinceBlock(@Body() listSinceBlockDto: ListSinceBlockDto) {
+    return this.walletService.listSinceBlock(listSinceBlockDto);
+  }
+
+  @Post('listtransactions')
+  listTransactions(@Body() listTransactionsDto: ListTransactionsDto) {
+    return this.walletService.listTransactions(listTransactionsDto);
+  }
+
+  @Post('listunspent')
+  listUnspent(@Body() listUnspentDto: ListUnspentDto) {
+    return this.walletService.listUnspent(listUnspentDto);
+  }
+
   @Get('listwallets')
   listWallets() {
     return this.walletService.listWallets();
@@ -148,5 +167,12 @@ export class WalletController {
   @Get('listwalletdir')
   listWalletdir() {
     return this.walletService.listWalletdir();
+  }
+
+  @Post('walletcreatefundedpsbt')
+  walletCreateFundedPsbt(
+    @Body() walletCreateFundedPsbtDto: WalletCreateFundedPsbtDto,
+  ) {
+    return this.walletService.walletCreateFundedPsbt(walletCreateFundedPsbtDto);
   }
 }

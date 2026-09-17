@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UtilService } from './util.service';
+import { EstimateSmartFeeDto } from './dto/estimate-smart-fee.dto';
 
 @Controller('util')
 export class UtilController {
@@ -21,5 +22,10 @@ export class UtilController {
   @Post('validateaddress')
   validateAddress(@Body('address') address: string) {
     return this.utilService.validateAddress(address);
+  }
+
+  @Post('estimatesmartfee')
+  estimateSmartFee(@Body() estimateSmartFeeDto: EstimateSmartFeeDto) {
+    return this.utilService.estimateSmartFee(estimateSmartFeeDto);
   }
 }
