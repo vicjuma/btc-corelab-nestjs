@@ -10,6 +10,7 @@ import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
 import { CombinePsbtDto } from './dto/combine-psbt.dto';
 import { JoinPsbtsDto } from './dto/join-psbts.dto';
+import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -89,6 +90,14 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('createpsbt', ...args);
+  }
+
+  async finalizePsbt(finalizePsbtDto: FinalizePsbtDto) {
+    const { psbt, extract } = finalizePsbtDto;
+
+    const args = [psbt, ...(extract !== undefined ? [String(extract)] : [])];
+
+    return this.rpcService.rpc('finalizepsbt', ...args);
   }
 
   async joinPsbts(joinPsbtsDto: JoinPsbtsDto) {

@@ -10,6 +10,7 @@ import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
 import { CombinePsbtDto } from './dto/combine-psbt.dto';
 import { JoinPsbtsDto } from './dto/join-psbts.dto';
+import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -46,6 +47,11 @@ export class RawTransactionsController {
   @Post('createpsbt')
   createPsbt(@Body() createPsbtDto: CreatePsbtDto) {
     return this.rawTransactionsService.createPsbt(createPsbtDto);
+  }
+
+  @Post('finalizepsbt')
+  finalizePsbt(@Body() finalizePsbtDto: FinalizePsbtDto) {
+    return this.rawTransactionsService.finalizePsbt(finalizePsbtDto);
   }
 
   @Post('joinpsbts')
