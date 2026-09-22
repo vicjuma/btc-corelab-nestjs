@@ -18,6 +18,8 @@ import { ListTransactionsDto } from './dto/list-transactions.dto';
 import { ListUnspentDto } from './dto/list-unspent.dto';
 import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
 import { SimulateRawTransactionDto } from './dto/simulate-raw-transaction.dto';
+import { WalletProcessPsbtDto } from './dto/wallet-process-psbt.dto';
+import { SignRawTransactionWithWalletDto } from './dto/sign-raw-transaction-with-wallet.dto';
 
 @Injectable()
 export class WalletService {
@@ -492,6 +494,24 @@ export class WalletService {
     return this.rpcService.rpc('walletcreatefundedpsbt', ...args);
   }
 
+  async signRawTransactionWithWallet(
+    signRawTransactionWithWalletDto: SignRawTransactionWithWalletDto,
+  ) {
+    const { hexstring, prevtxs, sighashtype } = signRawTransactionWithWalletDto;
+
+    const hasLaterArg = prevtxs !== undefined || sighashtype !== undefined;
+
+    const args = [
+      hexstring,
+
+      ...(hasLaterArg ? [JSON.stringify(prevtxs ?? [])] : []),
+
+      ...(sighashtype !== undefined ? [sighashtype] : []),
+    ];
+
+    return this.rpcService.rpc('signrawtransactionwithwallet', ...args);
+  }
+
   async simulateRawTransaction(
     simulateRawTransactionDto: SimulateRawTransactionDto,
   ) {
@@ -504,5 +524,40 @@ export class WalletService {
     ];
 
     return this.rpcService.rpc('simulaterawtransaction', ...args);
+  }
+
+  async walletDisplayAddress(address: string) {
+    return this.rpcService.rpc('walletdisplayaddress', `address=${address}`);
+  }
+
+  async walletProcessPsbt(walletProcessPsbtDto: WalletProcessPsbtDto) {
+    const { psbt, sign, sighashtype, bip32derivs, finalize } =
+      walletProcessPsbtDto;
+
+    const hasLaterArg =
+      sign !== undefined ||
+      sighashtype !== undefined ||
+      bip32derivs !== undefined ||
+      finalize !== undefined;
+
+    const args = [
+      psbt,
+
+      ...(hasLaterArg ? [String(sign ?? true)] : []),
+
+      ...(sighashtype !== undefined ||
+      bip32derivs !== undefined ||
+      finalize !== undefined
+        ? [sighashtype ?? 'DEFAULT']
+        : []),
+
+      ...(bip32derivs !== undefined || finalize !== undefined
+        ? [String(bip32derivs ?? true)]
+        : []),
+
+      ...(finalize !== undefined ? [String(finalize)] : []),
+    ];
+
+    return this.rpcService.rpc('walletprocesspsbt', ...args);
   }
 }

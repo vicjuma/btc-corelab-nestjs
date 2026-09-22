@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { RawTransactionsService } from './raw-transactions.service';
 import { CreateRawTransactionDto } from './dto/create-raw-transaction.dto';
 import { FundRawTransactionDto } from './dto/fund-raw-transaction.dto';
@@ -7,6 +7,7 @@ import { UtxoUpdatePsbtDto } from './dto/utxo-update-psbt.dto';
 import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
 import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
 import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
+import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -21,6 +22,11 @@ export class RawTransactionsController {
     return this.rawTransactionsService.createRawTransaction(
       createRawTransactionDto,
     );
+  }
+
+  @Get('enumeratesigners')
+  enumerateSigners() {
+    return this.rawTransactionsService.enumerateSigners();
   }
 
   @Post('fundrawtransaction')
@@ -52,6 +58,15 @@ export class RawTransactionsController {
   @Post('analyzepsbt')
   analyzePsbt(@Body() analyzePsbtDto: AnalyzePsbtDto) {
     return this.rawTransactionsService.analyzePsbt(analyzePsbtDto);
+  }
+
+  @Post('signrawtransactionwithkey')
+  signRawTransactionWithKey(
+    @Body() signRawTransactionWithKeyDto: SignRawTransactionWithKeyDto,
+  ) {
+    return this.rawTransactionsService.signRawTransactionWithKey(
+      signRawTransactionWithKeyDto,
+    );
   }
 
   @Post('testmempoolaccept')

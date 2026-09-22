@@ -7,6 +7,7 @@ import { UtxoUpdatePsbtDto } from './dto/utxo-update-psbt.dto';
 import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
 import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
 import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
+import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -35,6 +36,10 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('createrawtransaction', ...args);
+  }
+
+  async enumerateSigners() {
+    return this.rpcService.rpc('enumeratesigners');
   }
 
   async fundRawTransaction(fundRawTransactionDto: FundRawTransactionDto) {
@@ -120,6 +125,26 @@ export class RawTransactionsService {
     const { psbt } = analyzePsbtDto;
 
     return this.rpcService.rpc('analyzepsbt', psbt);
+  }
+
+  async signRawTransactionWithKey(
+    signRawTransactionWithKeyDto: SignRawTransactionWithKeyDto,
+  ) {
+    const { hexstring, privkeys, prevtxs, sighashtype } =
+      signRawTransactionWithKeyDto;
+
+    const args = [
+      hexstring,
+      JSON.stringify(privkeys),
+
+      ...(prevtxs !== undefined || sighashtype !== undefined
+        ? [JSON.stringify(prevtxs ?? [])]
+        : []),
+
+      ...(sighashtype !== undefined ? [sighashtype] : []),
+    ];
+
+    return this.rpcService.rpc('signrawtransactionwithkey', ...args);
   }
 
   async testMempoolAccept(testMempoolAcceptDto: TestMempoolAcceptDto) {

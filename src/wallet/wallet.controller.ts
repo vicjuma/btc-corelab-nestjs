@@ -17,6 +17,8 @@ import { ListTransactionsDto } from './dto/list-transactions.dto';
 import { ListUnspentDto } from './dto/list-unspent.dto';
 import { WalletCreateFundedPsbtDto } from './dto/wallet-create-funded-psbt.dto';
 import { SimulateRawTransactionDto } from './dto/simulate-raw-transaction.dto';
+import { WalletProcessPsbtDto } from './dto/wallet-process-psbt.dto';
+import { SignRawTransactionWithWalletDto } from './dto/sign-raw-transaction-with-wallet.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -177,10 +179,29 @@ export class WalletController {
     return this.walletService.walletCreateFundedPsbt(walletCreateFundedPsbtDto);
   }
 
+  @Post('signrawtransactionwithwallet')
+  signRawTransactionWithWallet(
+    @Body() signRawTransactionWithWalletDto: SignRawTransactionWithWalletDto,
+  ) {
+    return this.walletService.signRawTransactionWithWallet(
+      signRawTransactionWithWalletDto,
+    );
+  }
+
   @Post('simulaterawtransaction')
   simulateRawTransaction(
     @Body() simulateRawTransactionDto: SimulateRawTransactionDto,
   ) {
     return this.walletService.simulateRawTransaction(simulateRawTransactionDto);
+  }
+
+  @Post('walletdisplayaddress')
+  walletDisplayAddress(@Body() address: string) {
+    return this.walletService.walletDisplayAddress(address);
+  }
+
+  @Post('walletprocesspsbt')
+  walletProcessPsbt(@Body() walletProcessPsbtDto: WalletProcessPsbtDto) {
+    return this.walletService.walletProcessPsbt(walletProcessPsbtDto);
   }
 }
