@@ -8,12 +8,19 @@ import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
 import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
 import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
+import { CombinePsbtDto } from './dto/combine-psbt.dto';
+import { JoinPsbtsDto } from './dto/join-psbts.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
   constructor(
     private readonly rawTransactionsService: RawTransactionsService,
   ) {}
+
+  @Post('combinepsbt')
+  combinePsbt(@Body() combinePsbtDto: CombinePsbtDto) {
+    return this.rawTransactionsService.combinePsbt(combinePsbtDto);
+  }
 
   @Post('createrawtransaction')
   createRawTransaction(
@@ -39,6 +46,11 @@ export class RawTransactionsController {
   @Post('createpsbt')
   createPsbt(@Body() createPsbtDto: CreatePsbtDto) {
     return this.rawTransactionsService.createPsbt(createPsbtDto);
+  }
+
+  @Post('joinpsbts')
+  joinPsbts(@Body() joinPsbtsDto: JoinPsbtsDto) {
+    return this.rawTransactionsService.joinPsbts(joinPsbtsDto);
   }
 
   @Post('utxoupdatepsbt')

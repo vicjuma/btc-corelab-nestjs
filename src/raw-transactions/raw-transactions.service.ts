@@ -8,10 +8,18 @@ import { DescriptorProcessPsbtDto } from './dto/descriptor-process-psbt.dto';
 import { AnalyzePsbtDto } from './dto/analyze-psbt.dto';
 import { TestMempoolAcceptDto } from './dto/test-mempool-accept.dto';
 import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-key.dto';
+import { CombinePsbtDto } from './dto/combine-psbt.dto';
+import { JoinPsbtsDto } from './dto/join-psbts.dto';
 
 @Injectable()
 export class RawTransactionsService {
   constructor(private readonly rpcService: RpcService) {}
+
+  async combinePsbt(combinePsbtDto: CombinePsbtDto) {
+    const { txs } = combinePsbtDto;
+
+    return this.rpcService.rpc('combinepsbt', JSON.stringify(txs));
+  }
 
   async createRawTransaction(createRawTransactionDto: CreateRawTransactionDto) {
     const { inputs, outputs, locktime, replaceable, version } =
@@ -81,6 +89,12 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('createpsbt', ...args);
+  }
+
+  async joinPsbts(joinPsbtsDto: JoinPsbtsDto) {
+    const { txs } = joinPsbtsDto;
+
+    return this.rpcService.rpc('joinpsbts', JSON.stringify(txs));
   }
 
   async utxoUpdatePsbt(utxoUpdatePsbtDto: UtxoUpdatePsbtDto) {
