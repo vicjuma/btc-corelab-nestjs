@@ -11,6 +11,8 @@ import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-ke
 import { CombinePsbtDto } from './dto/combine-psbt.dto';
 import { JoinPsbtsDto } from './dto/join-psbts.dto';
 import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
+import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
+import { SubmitPackageDto } from './dto/submit-package.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -78,6 +80,13 @@ export class RawTransactionsController {
     return this.rawTransactionsService.analyzePsbt(analyzePsbtDto);
   }
 
+  @Post('sendrawtransaction')
+  sendRawTransaction(@Body() sendRawTransactionDto: SendRawTransactionDto) {
+    return this.rawTransactionsService.sendRawTransaction(
+      sendRawTransactionDto,
+    );
+  }
+
   @Post('signrawtransactionwithkey')
   signRawTransactionWithKey(
     @Body() signRawTransactionWithKeyDto: SignRawTransactionWithKeyDto,
@@ -85,6 +94,11 @@ export class RawTransactionsController {
     return this.rawTransactionsService.signRawTransactionWithKey(
       signRawTransactionWithKeyDto,
     );
+  }
+
+  @Post('submitpackage')
+  submitPackage(@Body() submitPackageDto: SubmitPackageDto) {
+    return this.rawTransactionsService.submitPackage(submitPackageDto);
   }
 
   @Post('testmempoolaccept')

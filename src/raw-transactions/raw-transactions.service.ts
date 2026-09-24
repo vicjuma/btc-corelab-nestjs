@@ -11,6 +11,8 @@ import { SignRawTransactionWithKeyDto } from './dto/sign-raw-transaction-with-ke
 import { CombinePsbtDto } from './dto/combine-psbt.dto';
 import { JoinPsbtsDto } from './dto/join-psbts.dto';
 import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
+import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
+import { SubmitPackageDto } from './dto/submit-package.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -150,6 +152,22 @@ export class RawTransactionsService {
     return this.rpcService.rpc('analyzepsbt', psbt);
   }
 
+  async sendRawTransaction(sendRawTransactionDto: SendRawTransactionDto) {
+    const { hexstring, maxfeerate, maxburnamount } = sendRawTransactionDto;
+
+    const args = [
+      hexstring,
+
+      ...(maxfeerate !== undefined || maxburnamount !== undefined
+        ? [String(maxfeerate ?? 0.1)]
+        : []),
+
+      ...(maxburnamount !== undefined ? [String(maxburnamount)] : []),
+    ];
+
+    return this.rpcService.rpc('sendrawtransaction', ...args);
+  }
+
   async signRawTransactionWithKey(
     signRawTransactionWithKeyDto: SignRawTransactionWithKeyDto,
   ) {
@@ -168,6 +186,22 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('signrawtransactionwithkey', ...args);
+  }
+
+  async submitPackage(submitPackageDto: SubmitPackageDto) {
+    const { package: txPackage, maxfeerate, maxburnamount } = submitPackageDto;
+
+    const args = [
+      JSON.stringify(txPackage),
+
+      ...(maxfeerate !== undefined || maxburnamount !== undefined
+        ? [String(maxfeerate ?? 0.1)]
+        : []),
+
+      ...(maxburnamount !== undefined ? [String(maxburnamount)] : []),
+    ];
+
+    return this.rpcService.rpc('submitpackage', ...args);
   }
 
   async testMempoolAccept(testMempoolAcceptDto: TestMempoolAcceptDto) {
