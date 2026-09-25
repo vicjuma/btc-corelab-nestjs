@@ -15,6 +15,7 @@ import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
 import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
 import { BumpFeeDto } from './dto/bump-fee.dto';
+import { PsbtBumpFeeDto } from './dto/psbt-bump-fee.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -90,6 +91,11 @@ export class RawTransactionsController {
   @Post('analyzepsbt')
   analyzePsbt(@Body() analyzePsbtDto: AnalyzePsbtDto) {
     return this.rawTransactionsService.analyzePsbt(analyzePsbtDto);
+  }
+
+  @Post('psbtbumpfee')
+  psbtBumpFee(@Body() psbtBumpFeeDto: PsbtBumpFeeDto) {
+    return this.rawTransactionsService.psbtBumpFee(psbtBumpFeeDto);
   }
 
   @Post('sendrawtransaction')

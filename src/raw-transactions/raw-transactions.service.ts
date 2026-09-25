@@ -15,6 +15,7 @@ import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
 import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
 import { BumpFeeDto } from './dto/bump-fee.dto';
+import { PsbtBumpFeeDto } from './dto/psbt-bump-fee.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -179,6 +180,17 @@ export class RawTransactionsService {
     ];
 
     return this.rpcService.rpc('getrawtransaction', ...args);
+  }
+
+  async psbtBumpFee(psbtBumpFeeDto: PsbtBumpFeeDto) {
+    const { txid, options } = psbtBumpFeeDto;
+
+    const args = [
+      txid,
+      ...(options !== undefined ? [JSON.stringify(options)] : []),
+    ];
+
+    return this.rpcService.rpc('psbtbumpfee', ...args);
   }
 
   async sendRawTransaction(sendRawTransactionDto: SendRawTransactionDto) {
