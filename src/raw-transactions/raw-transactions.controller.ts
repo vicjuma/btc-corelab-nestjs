@@ -13,6 +13,7 @@ import { JoinPsbtsDto } from './dto/join-psbts.dto';
 import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
+import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
@@ -54,6 +55,11 @@ export class RawTransactionsController {
   @Post('finalizepsbt')
   finalizePsbt(@Body() finalizePsbtDto: FinalizePsbtDto) {
     return this.rawTransactionsService.finalizePsbt(finalizePsbtDto);
+  }
+
+  @Post('getrawtransaction')
+  getRawTransaction(@Body() getRawTransactionDto: GetRawTransactionDto) {
+    return this.rawTransactionsService.getRawTransaction(getRawTransactionDto);
   }
 
   @Post('joinpsbts')

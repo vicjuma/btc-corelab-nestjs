@@ -13,6 +13,7 @@ import { JoinPsbtsDto } from './dto/join-psbts.dto';
 import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
+import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
 
 @Injectable()
 export class RawTransactionsService {
@@ -150,6 +151,22 @@ export class RawTransactionsService {
     const { psbt } = analyzePsbtDto;
 
     return this.rpcService.rpc('analyzepsbt', psbt);
+  }
+
+  async getRawTransaction(getRawTransactionDto: GetRawTransactionDto) {
+    const { txid, verbosity, blockhash } = getRawTransactionDto;
+
+    const args = [
+      txid,
+
+      ...(verbosity !== undefined || blockhash !== undefined
+        ? [String(verbosity ?? 0)]
+        : []),
+
+      ...(blockhash !== undefined ? [blockhash] : []),
+    ];
+
+    return this.rpcService.rpc('getrawtransaction', ...args);
   }
 
   async sendRawTransaction(sendRawTransactionDto: SendRawTransactionDto) {

@@ -6,6 +6,11 @@ import { GetRawMempoolDto } from './dto/get-raw-mempool.dto';
 import { GetMempoolEntryDto } from './dto/get-mempool-entry.dto';
 import { GetMempoolAncestorsDto } from './dto/get-mempool-ancestors.dto';
 import { GetMempoolDescendantsDto } from './dto/get-mempool-descendants.dto';
+import { GetBlockDto } from './dto/get-block.dto';
+import { GetBlockHeaderDto } from './dto/get-block-header.dto';
+import { WaitForNewBlockDto } from './dto/wait-for-new-block.dto';
+import { WaitForBlockDto } from './dto/wait-for-block.dto';
+import { WaitForBlockHeightDto } from './dto/wait-for-block-height.dto';
 
 /**
  * These servce functions are helping is to internally user them with these abstractions
@@ -16,6 +21,27 @@ import { GetMempoolDescendantsDto } from './dto/get-mempool-descendants.dto';
 @Injectable()
 export class BlockchainService {
   constructor(private readonly rpcService: RpcService) {}
+  async getBlock(getBlockDto: GetBlockDto) {
+    const { blockhash, verbosity } = getBlockDto;
+
+    const args = [
+      blockhash,
+      ...(verbosity !== undefined ? [String(verbosity)] : []),
+    ];
+
+    return this.rpcService.rpc('getblock', ...args);
+  }
+
+  async getBlockHeader(getBlockHeaderDto: GetBlockHeaderDto) {
+    const { blockhash, verbose } = getBlockHeaderDto;
+
+    const args = [
+      blockhash,
+      ...(verbose !== undefined ? [String(verbose)] : []),
+    ];
+
+    return this.rpcService.rpc('getblockheader', ...args);
+  }
 
   getNetworkInfo() {
     return this.rpcService.rpc('getnetworkinfo');
@@ -103,5 +129,41 @@ export class BlockchainService {
     const { txid } = getMempoolEntryDto;
 
     return this.rpcService.rpc('getmempoolentry', txid);
+  }
+
+  async waitForNewBlock(waitForNewBlockDto: WaitForNewBlockDto) {
+    const { timeout, current_tip } = waitForNewBlockDto;
+
+    const args = [
+      ...(timeout !== undefined || current_tip !== undefined
+        ? [String(timeout ?? 0)]
+        : []),
+
+      ...(current_tip !== undefined ? [current_tip] : []),
+    ];
+
+    return this.rpcService.rpc('waitfornewblock', ...args);
+  }
+
+  async waitForBlock(waitForBlockDto: WaitForBlockDto) {
+    const { blockhash, timeout } = waitForBlockDto;
+
+    const args = [
+      blockhash,
+      ...(timeout !== undefined ? [String(timeout)] : []),
+    ];
+
+    return this.rpcService.rpc('waitforblock', ...args);
+  }
+
+  async waitForBlockHeight(waitForBlockHeightDto: WaitForBlockHeightDto) {
+    const { height, timeout } = waitForBlockHeightDto;
+
+    const args = [
+      String(height),
+      ...(timeout !== undefined ? [String(timeout)] : []),
+    ];
+
+    return this.rpcService.rpc('waitforblockheight', ...args);
   }
 }

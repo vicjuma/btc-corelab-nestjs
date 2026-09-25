@@ -6,10 +6,25 @@ import { GetRawMempoolDto } from './dto/get-raw-mempool.dto';
 import { GetMempoolEntryDto } from './dto/get-mempool-entry.dto';
 import { GetMempoolAncestorsDto } from './dto/get-mempool-ancestors.dto';
 import { GetMempoolDescendantsDto } from './dto/get-mempool-descendants.dto';
+import { GetBlockDto } from './dto/get-block.dto';
+import { GetBlockHeaderDto } from './dto/get-block-header.dto';
+import { WaitForNewBlockDto } from './dto/wait-for-new-block.dto';
+import { WaitForBlockDto } from './dto/wait-for-block.dto';
+import { WaitForBlockHeightDto } from './dto/wait-for-block-height.dto';
 
 @Controller('blockchain')
 export class BlockchainController {
   constructor(private readonly blockchainService: BlockchainService) {}
+
+  @Post('getblock')
+  getBlock(@Body() getBlockDto: GetBlockDto) {
+    return this.blockchainService.getBlock(getBlockDto);
+  }
+
+  @Post('getblockheader')
+  getBlockHeader(@Body() getBlockHeaderDto: GetBlockHeaderDto) {
+    return this.blockchainService.getBlockHeader(getBlockHeaderDto);
+  }
 
   @Get('getnetworkinfo')
   getNetworkInfo() {
@@ -80,5 +95,20 @@ export class BlockchainController {
   @Post('getmempoolentry')
   getMempoolEntry(@Body() getMempoolEntryDto: GetMempoolEntryDto) {
     return this.blockchainService.getMempoolEntry(getMempoolEntryDto);
+  }
+
+  @Post('waitfornewblock')
+  waitForNewBlock(@Body() waitForNewBlockDto: WaitForNewBlockDto) {
+    return this.blockchainService.waitForNewBlock(waitForNewBlockDto);
+  }
+
+  @Post('waitforblock')
+  waitForBlock(@Body() waitForBlockDto: WaitForBlockDto) {
+    return this.blockchainService.waitForBlock(waitForBlockDto);
+  }
+
+  @Post('waitforblockheight')
+  waitForBlockHeight(@Body() waitForBlockHeightDto: WaitForBlockHeightDto) {
+    return this.blockchainService.waitForBlockHeight(waitForBlockHeightDto);
   }
 }
