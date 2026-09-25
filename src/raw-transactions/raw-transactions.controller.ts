@@ -14,12 +14,18 @@ import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
 import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
+import { BumpFeeDto } from './dto/bump-fee.dto';
 
 @Controller('raw-transactions')
 export class RawTransactionsController {
   constructor(
     private readonly rawTransactionsService: RawTransactionsService,
   ) {}
+
+  @Post('bumpfee')
+  bumpFee(@Body() bumpFeeDto: BumpFeeDto) {
+    return this.rawTransactionsService.bumpFee(bumpFeeDto);
+  }
 
   @Post('combinepsbt')
   combinePsbt(@Body() combinePsbtDto: CombinePsbtDto) {

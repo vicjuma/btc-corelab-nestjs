@@ -14,10 +14,22 @@ import { FinalizePsbtDto } from './dto/finalize-psbt.dto';
 import { SendRawTransactionDto } from './dto/send-raw-transaction.dto';
 import { SubmitPackageDto } from './dto/submit-package.dto';
 import { GetRawTransactionDto } from './dto/get-raw-transaction.dto';
+import { BumpFeeDto } from './dto/bump-fee.dto';
 
 @Injectable()
 export class RawTransactionsService {
   constructor(private readonly rpcService: RpcService) {}
+
+  async bumpFee(bumpFeeDto: BumpFeeDto) {
+    const { txid, options } = bumpFeeDto;
+
+    const args = [
+      txid,
+      ...(options !== undefined ? [JSON.stringify(options)] : []),
+    ];
+
+    return this.rpcService.rpc('bumpfee', ...args);
+  }
 
   async combinePsbt(combinePsbtDto: CombinePsbtDto) {
     const { txs } = combinePsbtDto;
