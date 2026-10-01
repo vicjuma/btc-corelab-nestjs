@@ -51,16 +51,22 @@ export class BlockchainService {
     return this.rpcService.rpc('getblockchaininfo');
   }
 
-  getBestBlockHash() {
-    return this.rpcService.rpc('getbestblockhash');
+  async getBestBlockHash() {
+    const bestBlockHash = await this.rpcService.rpc('getbestblockhash');
+    const returnedJson = { data: bestBlockHash };
+    return returnedJson;
   }
 
-  getBlockCount() {
-    return this.rpcService.rpc('getblockcount');
+  async getBlockCount() {
+    const blockCount = await this.rpcService.rpc('getblockcount');
+    const returnedJson = { data: blockCount };
+    return returnedJson;
   }
 
-  getConnectionCount() {
-    return this.rpcService.rpc('getconnectioncount');
+  async getConnectionCount() {
+    const connectionCount = await this.rpcService.rpc('getconnectioncount');
+    const returnedJson = { data: connectionCount };
+    return returnedJson;
   }
 
   async getTxOut(getTxOutDto: GetTxOutDto) {
