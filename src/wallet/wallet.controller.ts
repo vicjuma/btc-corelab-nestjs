@@ -44,7 +44,7 @@ export class WalletController {
     return this.walletService.bumpFee(createBumpFeeDto);
   }
 
-  @Post('create')
+  @Post('createwallet')
   create(@Body() createWalletDto: CreateWalletDto) {
     return this.walletService.createWallet(createWalletDto);
   }
@@ -61,7 +61,7 @@ export class WalletController {
     return this.walletService.deriveHdKey(deriveHdKeyDto);
   }
 
-  @Post('encrypt')
+  @Post('encryptwallet')
   encrypt(@Body() passphrase: string) {
     return this.walletService.encryptWallet(passphrase);
   }

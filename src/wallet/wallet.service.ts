@@ -72,7 +72,7 @@ export class WalletService {
       wallet_name,
       disable_private_keys,
       blank,
-      // passphrase,
+      passphrase,
       avoid_reuse,
       descriptors,
       load_on_startup,
@@ -83,7 +83,7 @@ export class WalletService {
       `wallet_name=${wallet_name}`,
       `disable_private_keys=${disable_private_keys}`,
       `blank=${blank}`,
-      // `passphrase=${passphrase}`,
+      `passphrase=${passphrase}`,
       `avoid_reuse=${avoid_reuse}`,
       `descriptors=${descriptors}`,
       `load_on_startup=${load_on_startup}`,
@@ -125,8 +125,23 @@ export class WalletService {
     return this.rpcService.rpc('derivehdkey', ...args);
   }
 
+  /**
+   * 
+   * @param passphrase async getBlockCount() {
+    const blockCount = await this.rpcService.rpc('getblockcount');
+    const returnedJson = { data: blockCount };
+    return returnedJson;
+  }
+   * @returns 
+   */
+
   async encryptWallet(passphrase: string) {
-    return this.rpcService.rpc('encryptwallet', `passphrase=${passphrase}`);
+    const encryptionResult = await this.rpcService.rpc(
+      'encryptwallet',
+      `passphrase=${passphrase}`,
+    );
+    const returnedJson = { data: encryptionResult };
+    return returnedJson;
   }
 
   async exportWatchonlyWallet(destination: string) {

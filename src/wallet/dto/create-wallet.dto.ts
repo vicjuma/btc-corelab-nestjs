@@ -31,7 +31,7 @@ export class CreateWalletDto {
    */
   @IsOptional()
   @IsString()
-  passphrase?: string | undefined = undefined;
+  passphrase?: string = '';
 
   /**
    * Keep track of coin reuse.
