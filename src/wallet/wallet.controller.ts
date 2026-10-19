@@ -129,8 +129,8 @@ export class WalletController {
   }
 
   @Get('listdescriptors')
-  listDescriptors() {
-    return this.walletService.listDescriptors();
+  listDescriptors(@Body() privateProp: boolean) {
+    return this.walletService.listDescriptors(privateProp);
   }
 
   @Get('listreceivedbyaddress')
